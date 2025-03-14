@@ -9,12 +9,13 @@ public class GameController : MonoBehaviour {
     public int goalx = 1;
     public int goaly = 1;
     public float timeStep = 0.1f;
+    private GraphView graphView;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         if (mapData != null && graph != null) {
             int[,] mapInstance = mapData.MakeMap();
             graph.Init(mapInstance);
-            GraphView graphView = graph.GetComponent<GraphView>();
+            graphView = graph.GetComponent<GraphView>();
             if (graphView != null) {
                 graphView.Init(graph);
             } else {
@@ -24,11 +25,14 @@ public class GameController : MonoBehaviour {
                 Node startNode = graph.nodes[startx, starty];
                 Node goalNode = graph.nodes[goalx, goaly];
                 pathfinder.Init(graph, graphView, startNode, goalNode);
-                StartCoroutine(pathfinder.SearchRoutine(timeStep));
             } else {
                 Debug.LogWarning("GameController Error: start or end nodes are not in bounds");
             }
         }
+    }
+
+    public void BeginSearch() {
+        StartCoroutine(pathfinder.SearchRoutine(timeStep));
     }
 
     // Update is called once per frame
