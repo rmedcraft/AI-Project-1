@@ -22,6 +22,9 @@ public class Pathfinder : MonoBehaviour {
     public bool isComplete;
     public int iterations;
 
+    public float timeStep = 0.1f;
+
+
     public void Init(Graph graph, GraphView graphView, Node start, Node goal) {
         if (start == null || goal == null || graphView == null || graph == null) {
             Debug.LogWarning("Pathfinder error: Missing components.");
@@ -85,7 +88,13 @@ public class Pathfinder : MonoBehaviour {
 
     }
 
-    public IEnumerator SearchRoutine(float timeStep = 0.1f) {
+    public void ChooseSearch(SearchType s) {
+        if (s == SearchType.BFS) {
+            StartCoroutine(BFSSearchRoutine(timeStep));
+        }
+    }
+
+    public IEnumerator BFSSearchRoutine(float timeStep = 0.1f) {
         yield return null;
         while (!isComplete) {
             if (frontierNodes.Count > 0) {

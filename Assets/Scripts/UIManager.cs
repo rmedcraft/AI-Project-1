@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour {
                 SearchType s = (SearchType)dropdown.value;
                 // pass s to the beginSearch function, which will pass it to the pathfinder class to determine which alg to use
                 if (s != SearchType.None) {
-                    gameController.BeginSearch();
+                    gameController.BeginSearch(s);
                 } else {
                     // dont do anything, maybe put a popup on screen
                     Debug.Log("UIManager Error: Please select a search algorithm");
@@ -60,4 +60,8 @@ public enum SearchType {
     None = 0,
     BFS = 1,
     DFS = 2,
+    Dijkstra = 3,
+    GreedyBest = 4,
+    A = 5
+
 }

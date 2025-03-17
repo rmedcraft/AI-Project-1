@@ -8,7 +8,6 @@ public class GameController : MonoBehaviour {
     public int starty = 0;
     public int goalx = 1;
     public int goaly = 1;
-    public float timeStep = 0.1f;
     private GraphView graphView;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
@@ -31,8 +30,8 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void BeginSearch() {
-        StartCoroutine(pathfinder.SearchRoutine(timeStep));
+    public void BeginSearch(SearchType s) {
+        pathfinder.ChooseSearch(s);
     }
 
     // Update is called once per frame
