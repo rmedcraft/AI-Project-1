@@ -9,9 +9,6 @@ public class Pathfinder : MonoBehaviour {
 
     Graph graph;
     GraphView graphView;
-    Queue<Node> frontierNodes;
-    List<Node> exploreNodes;
-    List<Node> pathNodes;
 
     public Color startColor = Color.green;
     public Color goalColor = Color.red;
@@ -39,10 +36,6 @@ public class Pathfinder : MonoBehaviour {
         this.graphView = graphView;
         this.start = start;
         this.goal = goal;
-        frontierNodes = new Queue<Node>();
-        frontierNodes.Enqueue(start);
-        pathNodes = new List<Node>();
-        exploreNodes = new List<Node>();
 
         for (int r = 0; r < graph.getWidth(); r++) {
             for (int c = 0; c < graph.getHeight(); c++) {
@@ -50,13 +43,13 @@ public class Pathfinder : MonoBehaviour {
             }
         }
 
-        ShowColors(graphView, start, goal);
+        ShowColors(null, null, null);
 
         isComplete = false;
         iterations = 0;
     }
 
-    public void ShowColors(GraphView graphView, Node start, Node goal) {
+    public void ShowColors(List<Node> frontierNodes, List<Node> exploreNodes, List<Node> pathNodes) {
         if (graphView == null || start == null || goal == null) {
             return;
         }
@@ -88,85 +81,19 @@ public class Pathfinder : MonoBehaviour {
 
     public void ChooseSearch(SearchType s) {
         if (s == SearchType.BFS) {
-            StartCoroutine(BFSSearchRoutine());
+            BFS bfs = ScriptableObject.CreateInstance<BFS>();
+            bfs.Init(this, graph, start, goal);
+            StartCoroutine(bfs.BFSSearchRoutine());
         } else if (s == SearchType.DFS) {
-            StartCoroutine(DFSSearchRoutine());
+            DFS dfs = ScriptableObject.CreateInstance<DFS>();
+            dfs.Init(this, graph, start, goal);
+            StartCoroutine(dfs.DFSSearchRoutine());
         }
     }
 
-    public IEnumerator DFSSearchRoutine() {
-        yield return null;
-        Stack<Node> s = new Stack<Node>();
-        s.Push(start);
-        while (!isComplete) {
-            if (s.Count > 0) {
-                Node currentNode = s.Pop();
-                iterations++;
-                if (!exploreNodes.Contains(currentNode)) {
-                    exploreNodes.Add(currentNode);
-                }
+    
 
-                // add new bordering nodes to the stack
-                foreach (Node n in currentNode.neighbors) {
-                    if (n.nodeType != NodeType.blocked && !exploreNodes.Contains(n)) {
-                        s.Push(n);
-                        frontierNodes.Enqueue(n); // just so the color works, I'm not using frontier nodes in this alg, probably needs to be refactored
-                        n.prev = currentNode;
-                    }
-                }
-
-                // check if the current node was found
-                if (s.Contains(goal)) {
-                    pathNodes = GetPathNodes(goal);
-                    ShowColors(graphView, start, goal);
-                    isComplete = true;
-                }
-
-                yield return new WaitForSeconds(timeStep);
-            } else {
-                isComplete = true;
-            }
-            ShowColors(graphView, start, goal);
-        }
-    }
-
-    public IEnumerator BFSSearchRoutine() {
-        yield return null;
-        while (!isComplete) {
-            if (frontierNodes.Count > 0) {
-                Node currentNode = frontierNodes.Dequeue();
-                iterations++;
-                if (!exploreNodes.Contains(currentNode)) {
-                    exploreNodes.Add(currentNode);
-                }
-                ExpandFrontier(currentNode);
-                if (frontierNodes.Contains(goal)) {
-                    pathNodes = GetPathNodes(goal);
-                    ShowColors(graphView, start, goal);
-                    isComplete = true;
-                }
-
-                yield return new WaitForSeconds(timeStep);
-            } else {
-                isComplete = true;
-            }
-            ShowColors(graphView, start, goal);
-        }
-    }
-
-
-
-
-    public void ExpandFrontier(Node node) {
-        for (int i = 0; i < node.neighbors.Count; i++) {
-            if (!exploreNodes.Contains(node.neighbors[i]) && !frontierNodes.Contains(node.neighbors[i])) {
-                node.neighbors[i].prev = node;
-                frontierNodes.Enqueue(node.neighbors[i]);
-            }
-        }
-    }
-
-    List<Node> GetPathNodes(Node goalNode) {
+    public List<Node> GetPathNodes(Node goalNode) {
         List<Node> path = new List<Node>();
         if (goalNode == null) {
             return path;
