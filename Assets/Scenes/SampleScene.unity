@@ -620,7 +620,7 @@ MonoBehaviour:
   startx: 0
   starty: 0
   goalx: 6
-  goaly: 4
+  goaly: 5
 --- !u!4 &580853934
 Transform:
   m_ObjectHideFlags: 0

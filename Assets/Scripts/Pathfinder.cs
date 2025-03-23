@@ -50,13 +50,13 @@ public class Pathfinder : MonoBehaviour {
             }
         }
 
-        showColors(graphView, start, goal);
+        ShowColors(graphView, start, goal);
 
         isComplete = false;
         iterations = 0;
     }
 
-    public void showColors(GraphView graphView, Node start, Node goal) {
+    public void ShowColors(GraphView graphView, Node start, Node goal) {
         if (graphView == null || start == null || goal == null) {
             return;
         }
@@ -84,17 +84,53 @@ public class Pathfinder : MonoBehaviour {
         } else {
             Debug.LogWarning("GoalNodeView does not exist");
         }
-
-
     }
 
     public void ChooseSearch(SearchType s) {
         if (s == SearchType.BFS) {
-            StartCoroutine(BFSSearchRoutine(timeStep));
+            StartCoroutine(BFSSearchRoutine());
+        } else if (s == SearchType.DFS) {
+            StartCoroutine(DFSSearchRoutine());
         }
     }
 
-    public IEnumerator BFSSearchRoutine(float timeStep = 0.1f) {
+    public IEnumerator DFSSearchRoutine() {
+        yield return null;
+        Stack<Node> s = new Stack<Node>();
+        s.Push(start);
+        while (!isComplete) {
+            if (s.Count > 0) {
+                Node currentNode = s.Pop();
+                iterations++;
+                if (!exploreNodes.Contains(currentNode)) {
+                    exploreNodes.Add(currentNode);
+                }
+
+                // add new bordering nodes to the stack
+                foreach (Node n in currentNode.neighbors) {
+                    if (n.nodeType != NodeType.blocked && !exploreNodes.Contains(n)) {
+                        s.Push(n);
+                        frontierNodes.Enqueue(n); // just so the color works, I'm not using frontier nodes in this alg, probably needs to be refactored
+                        n.prev = currentNode;
+                    }
+                }
+
+                // check if the current node was found
+                if (s.Contains(goal)) {
+                    pathNodes = GetPathNodes(goal);
+                    ShowColors(graphView, start, goal);
+                    isComplete = true;
+                }
+
+                yield return new WaitForSeconds(timeStep);
+            } else {
+                isComplete = true;
+            }
+            ShowColors(graphView, start, goal);
+        }
+    }
+
+    public IEnumerator BFSSearchRoutine() {
         yield return null;
         while (!isComplete) {
             if (frontierNodes.Count > 0) {
@@ -106,7 +142,7 @@ public class Pathfinder : MonoBehaviour {
                 ExpandFrontier(currentNode);
                 if (frontierNodes.Contains(goal)) {
                     pathNodes = GetPathNodes(goal);
-                    showColors(graphView, start, goal);
+                    ShowColors(graphView, start, goal);
                     isComplete = true;
                 }
 
@@ -114,9 +150,12 @@ public class Pathfinder : MonoBehaviour {
             } else {
                 isComplete = true;
             }
-            showColors(graphView, start, goal);
+            ShowColors(graphView, start, goal);
         }
     }
+
+
+
 
     public void ExpandFrontier(Node node) {
         for (int i = 0; i < node.neighbors.Count; i++) {

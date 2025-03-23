@@ -3,41 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using TMPro;
+using System.Threading.Tasks;
 
 public class UIManager : MonoBehaviour {
     public GameObject startButton;
     public TMP_Dropdown dropdown;
     public GameController gameController;
+    private bool isSearching;
     // Use this for initialization
     void Start() {
-
+        isSearching = false;
     }
 
     // Update is called once per frame
     void Update() {
-        //Enable buttons for main menu only
-        // if (currentScreen == UIScreen.MainMenu) {
-        //     NewGameButton.SetActive(true);
-        //     OptionsButton.SetActive(true);
-        //     ReturnToMenuBtn.SetActive(false);
-        // } else if (currentScreen == UIScreen.Options) {
-        //     NewGameButton.SetActive(false);
-        //     OptionsButton.SetActive(false);
-        //     ReturnToMenuBtn.SetActive(true);
-        // }
-
-        // probably something like 
-        // if(game is running) {
-        //     startButton.SetActive(false);
-        //     dropDown.SetActive(false);
-        // } else {
-        //     startButton.SetActive(true);
-        //     dropDown.SetActive(true);
-        // }
-        // or if i'm being really fancy 
-        // startButton.SetActive(game is running)
-
-        // converts dropdown to enum
+        if (isSearching) {
+            startButton.SetActive(false);
+            dropdown.enabled = false;
+        } else {
+            startButton.SetActive(true);
+            dropdown.enabled = true;
+        }
 
     }
     public void StartButtonClicked() {
@@ -53,6 +39,10 @@ public class UIManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SetSearching(bool isSearching) {
+        this.isSearching = isSearching;
     }
 
 }
