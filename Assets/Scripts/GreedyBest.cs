@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BFS : ScriptableObject {
+public class GreedyBest : ScriptableObject {
     Node goal;
 
     Graph graph;
     Pathfinder pathfinder;
     List<Node> exploreNodes;
-    Queue<Node> frontierNodes;
+    List<Node> frontierNodes;
     List<Node> pathNodes;
     public bool isComplete;
     public int iterations;
@@ -29,8 +29,8 @@ public class BFS : ScriptableObject {
         this.goal = goal;
         this.pathfinder = pathfinder;
 
-        frontierNodes = new Queue<Node>();
-        frontierNodes.Enqueue(start);
+        frontierNodes = new List<Node>();
+        frontierNodes.Add(start);
         pathNodes = new List<Node>();
         exploreNodes = new List<Node>();
 
@@ -43,16 +43,18 @@ public class BFS : ScriptableObject {
         isComplete = false;
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public IEnumerator SearchRoutine() {
         yield return null;
         while (!isComplete) {
             if (frontierNodes.Count > 0) {
-                Node currentNode = frontierNodes.Dequeue();
+                // find the current node we're using based on which has the lowest manhattan distance in the frontier nodes
+                Node currentNode = frontierNodes[0];
+                foreach (Node n in frontierNodes) {
+                    if (ManhattanDist(currentNode, goal) > ManhattanDist(n, goal)) {
+                        currentNode = n;
+                    }
+                }
+                frontierNodes.Remove(currentNode);
                 iterations++;
                 if (!exploreNodes.Contains(currentNode)) {
                     exploreNodes.Add(currentNode);
@@ -72,11 +74,15 @@ public class BFS : ScriptableObject {
         }
     }
 
+    int ManhattanDist(Node n1, Node n2) {
+        return Mathf.Abs((n2.xIndex - n1.xIndex) + (n2.yIndex - n1.yIndex));
+    }
+
     public void ExpandFrontier(Node node) {
         for (int i = 0; i < node.neighbors.Count; i++) {
             if (!exploreNodes.Contains(node.neighbors[i]) && !frontierNodes.Contains(node.neighbors[i])) {
                 node.neighbors[i].prev = node;
-                frontierNodes.Enqueue(node.neighbors[i]);
+                frontierNodes.Add(node.neighbors[i]);
             }
         }
     }

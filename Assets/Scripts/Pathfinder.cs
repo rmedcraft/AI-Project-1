@@ -83,15 +83,23 @@ public class Pathfinder : MonoBehaviour {
         if (s == SearchType.BFS) {
             BFS bfs = ScriptableObject.CreateInstance<BFS>();
             bfs.Init(this, graph, start, goal);
-            StartCoroutine(bfs.BFSSearchRoutine());
+            StartCoroutine(bfs.SearchRoutine());
         } else if (s == SearchType.DFS) {
             DFS dfs = ScriptableObject.CreateInstance<DFS>();
             dfs.Init(this, graph, start, goal);
-            StartCoroutine(dfs.DFSSearchRoutine());
+            StartCoroutine(dfs.SearchRoutine());
+        } else if (s == SearchType.Dijkstra) {
+
+        } else if (s == SearchType.GreedyBest) {
+            GreedyBest greedyBest = ScriptableObject.CreateInstance<GreedyBest>();
+            greedyBest.Init(this, graph, start, goal);
+            StartCoroutine(greedyBest.SearchRoutine());
+        } else if(s == SearchType.A) {
+            
         }
     }
 
-    
+
 
     public List<Node> GetPathNodes(Node goalNode) {
         List<Node> path = new List<Node>();

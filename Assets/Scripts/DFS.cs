@@ -43,7 +43,7 @@ public class DFS : ScriptableObject {
         isComplete = false;
     }
 
-    public IEnumerator DFSSearchRoutine() {
+    public IEnumerator SearchRoutine() {
         yield return null;
 
         while (!isComplete) {

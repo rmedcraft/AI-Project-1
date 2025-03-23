@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BFS : ScriptableObject {
+public class AStar : ScriptableObject {
     Node goal;
 
     Graph graph;
@@ -43,41 +43,7 @@ public class BFS : ScriptableObject {
         isComplete = false;
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     public IEnumerator SearchRoutine() {
         yield return null;
-        while (!isComplete) {
-            if (frontierNodes.Count > 0) {
-                Node currentNode = frontierNodes.Dequeue();
-                iterations++;
-                if (!exploreNodes.Contains(currentNode)) {
-                    exploreNodes.Add(currentNode);
-                }
-                ExpandFrontier(currentNode);
-                if (frontierNodes.Contains(goal)) {
-                    pathNodes = pathfinder.GetPathNodes(goal);
-                    pathfinder.ShowColors(frontierNodes.ToList(), exploreNodes, pathNodes);
-                    isComplete = true;
-                }
-
-                yield return new WaitForSeconds(pathfinder.timeStep);
-            } else {
-                isComplete = true;
-            }
-            pathfinder.ShowColors(frontierNodes.ToList(), exploreNodes, pathNodes);
-        }
-    }
-
-    public void ExpandFrontier(Node node) {
-        for (int i = 0; i < node.neighbors.Count; i++) {
-            if (!exploreNodes.Contains(node.neighbors[i]) && !frontierNodes.Contains(node.neighbors[i])) {
-                node.neighbors[i].prev = node;
-                frontierNodes.Enqueue(node.neighbors[i]);
-            }
-        }
     }
 }
