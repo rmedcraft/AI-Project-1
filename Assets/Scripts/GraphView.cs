@@ -32,7 +32,7 @@ public class GraphView : MonoBehaviour {
 
     public void ColorNodes(List<Node> nodes, Color color) {
         foreach (Node n in nodes) {
-            if (n != null) {
+            if (n != null && n.nodeType != NodeType.blocked) {
                 NodeView nodeView = nodeViews[n.xIndex, n.yIndex];
                 if (nodeView != null) {
                     nodeView.ColorNode(color);

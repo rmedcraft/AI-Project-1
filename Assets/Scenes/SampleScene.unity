@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 5
   width: 5
-  text: {fileID: 4900000, guid: e2eb90ab6495ccd4ebab088d4c6ea475, type: 3}
+  text: {fileID: 4900000, guid: 6bd8db30a814c2941934ee75b5a3db9d, type: 3}
 --- !u!114 &1599927486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2206,7 +2206,10 @@ MonoBehaviour:
     - m_Text: Greedy Best First
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: A*
+    - m_Text: A* Manhattan
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: A* Euclidean
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:

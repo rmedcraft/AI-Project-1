@@ -5,6 +5,7 @@ public class Graph : MonoBehaviour {
     // Translates 1's and 0's from MapData.cs to an array of nodes
     public Node[,] nodes; //Array of nodes
     public List<Node> walls = new List<Node>();
+    public List<Node> paths = new List<Node>();
 
     int[,] m_mapData;
     int m_width = -1;
@@ -47,6 +48,8 @@ public class Graph : MonoBehaviour {
 
                 if (nodeType == NodeType.blocked) {
                     walls.Add(newNode);
+                } else {
+                    paths.Add(newNode);
                 }
             }
         }

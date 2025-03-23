@@ -14,9 +14,10 @@ public class AStar : ScriptableObject {
     public bool isComplete;
     public int iterations;
     Dictionary<Node, int> distFromStart;
+    bool manhattan;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Init(Pathfinder pathfinder, Graph graph, Node start, Node goal) {
+    public void Init(Pathfinder pathfinder, Graph graph, Node start, Node goal, bool manhattan) {
         if (start == null || goal == null || pathfinder == null || graph == null) {
             Debug.LogWarning("BFS error: Missing components.");
             return;
@@ -45,6 +46,7 @@ public class AStar : ScriptableObject {
         }
 
         isComplete = false;
+        this.manhattan = manhattan;
     }
 
     public IEnumerator SearchRoutine() {
@@ -88,7 +90,11 @@ public class AStar : ScriptableObject {
         }
     }
 
-    int AStarDist(Node start, Node goal) {
-        return distFromStart[start] + GreedyBest.ManhattanDist(start, goal);
+    float AStarDist(Node start, Node goal) {
+        return distFromStart[start] + (manhattan ? GreedyBest.ManhattanDist(start, goal) : EuclideanDist(start, goal));
+    }
+
+    float EuclideanDist(Node n1, Node n2) {
+        return Mathf.Sqrt(Mathf.Pow(n1.xIndex - n2.xIndex, 2) + Mathf.Pow(n1.yIndex - n2.yIndex, 2));
     }
 }

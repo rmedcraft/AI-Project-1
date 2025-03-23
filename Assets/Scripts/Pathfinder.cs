@@ -54,6 +54,10 @@ public class Pathfinder : MonoBehaviour {
             return;
         }
 
+        // resets the color of the open nodes so we can run another search without resetting the game
+        // the walls never change, so we dont need to reset them
+        graphView.ColorNodes(graph.paths, graphView.openColor);
+
         NodeView startNodeView = graphView.nodeViews[start.xIndex, start.yIndex];
         NodeView goalNodeView = graphView.nodeViews[goal.xIndex, goal.yIndex];
 
@@ -80,6 +84,7 @@ public class Pathfinder : MonoBehaviour {
     }
 
     public void ChooseSearch(SearchType s) {
+        ShowColors(null, null, null);
         if (s == SearchType.BFS) {
             BFS bfs = ScriptableObject.CreateInstance<BFS>();
             bfs.Init(this, graph, start, goal);
@@ -96,9 +101,13 @@ public class Pathfinder : MonoBehaviour {
             GreedyBest greedyBest = ScriptableObject.CreateInstance<GreedyBest>();
             greedyBest.Init(this, graph, start, goal);
             StartCoroutine(greedyBest.SearchRoutine());
-        } else if (s == SearchType.A) {
+        } else if (s == SearchType.AManhattan) {
             AStar a = ScriptableObject.CreateInstance<AStar>();
-            a.Init(this, graph, start, goal);
+            a.Init(this, graph, start, goal, true);
+            StartCoroutine(a.SearchRoutine());
+        } else if (s == SearchType.AEuclidean) {
+            AStar a = ScriptableObject.CreateInstance<AStar>();
+            a.Init(this, graph, start, goal, false);
             StartCoroutine(a.SearchRoutine());
         }
     }
