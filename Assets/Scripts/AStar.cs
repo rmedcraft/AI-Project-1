@@ -9,10 +9,11 @@ public class AStar : ScriptableObject {
     Graph graph;
     Pathfinder pathfinder;
     List<Node> exploreNodes;
-    Queue<Node> frontierNodes;
+    List<Node> frontierNodes;
     List<Node> pathNodes;
     public bool isComplete;
     public int iterations;
+    Dictionary<Node, int> distFromStart;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Init(Pathfinder pathfinder, Graph graph, Node start, Node goal) {
@@ -29,10 +30,13 @@ public class AStar : ScriptableObject {
         this.goal = goal;
         this.pathfinder = pathfinder;
 
-        frontierNodes = new Queue<Node>();
-        frontierNodes.Enqueue(start);
+        frontierNodes = new List<Node>();
+        frontierNodes.Add(start);
         pathNodes = new List<Node>();
         exploreNodes = new List<Node>();
+
+        distFromStart = new Dictionary<Node, int>();
+        distFromStart.Add(start, 0);
 
         for (int r = 0; r < graph.getWidth(); r++) {
             for (int c = 0; c < graph.getHeight(); c++) {
@@ -45,5 +49,46 @@ public class AStar : ScriptableObject {
 
     public IEnumerator SearchRoutine() {
         yield return null;
+        while (!isComplete) {
+            if (frontierNodes.Count > 0) {
+                Node currentNode = frontierNodes[0];
+                foreach (Node n in frontierNodes) {
+                    if (AStarDist(n, goal) < AStarDist(currentNode, goal)) {
+                        currentNode = n;
+                    }
+                }
+                frontierNodes.Remove(currentNode);
+
+                iterations++;
+                if (!exploreNodes.Contains(currentNode)) {
+                    exploreNodes.Add(currentNode);
+                }
+                ExpandFrontier(currentNode);
+                if (frontierNodes.Contains(goal)) {
+                    pathNodes = pathfinder.GetPathNodes(goal);
+                    pathfinder.ShowColors(frontierNodes.ToList(), exploreNodes, pathNodes);
+                    isComplete = true;
+                }
+
+                yield return new WaitForSeconds(pathfinder.timeStep);
+            } else {
+                isComplete = true;
+            }
+            pathfinder.ShowColors(frontierNodes.ToList(), exploreNodes, pathNodes);
+        }
+    }
+
+    public void ExpandFrontier(Node node) {
+        foreach (Node n in node.neighbors) {
+            if (!exploreNodes.Contains(n) && !frontierNodes.Contains(n)) {
+                n.prev = node;
+                distFromStart.Add(n, distFromStart[node] + 1);
+                frontierNodes.Add(n);
+            }
+        }
+    }
+
+    int AStarDist(Node start, Node goal) {
+        return distFromStart[start] + GreedyBest.ManhattanDist(start, goal);
     }
 }

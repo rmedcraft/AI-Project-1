@@ -619,8 +619,8 @@ MonoBehaviour:
   pathfinder: {fileID: 1713012690}
   startx: 0
   starty: 0
-  goalx: 6
-  goaly: 5
+  goalx: 11
+  goaly: 6
 --- !u!4 &580853934
 Transform:
   m_ObjectHideFlags: 0
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 5
   width: 5
-  text: {fileID: 4900000, guid: 45e9deea4b403644bb7f7c5093d2031a, type: 3}
+  text: {fileID: 4900000, guid: e2eb90ab6495ccd4ebab088d4c6ea475, type: 3}
 --- !u!114 &1599927486
 MonoBehaviour:
   m_ObjectHideFlags: 0

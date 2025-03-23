@@ -74,7 +74,7 @@ public class GreedyBest : ScriptableObject {
         }
     }
 
-    int ManhattanDist(Node n1, Node n2) {
+    public static int ManhattanDist(Node n1, Node n2) {
         return Mathf.Abs((n2.xIndex - n1.xIndex) + (n2.yIndex - n1.yIndex));
     }
 

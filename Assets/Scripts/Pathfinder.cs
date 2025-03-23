@@ -89,13 +89,17 @@ public class Pathfinder : MonoBehaviour {
             dfs.Init(this, graph, start, goal);
             StartCoroutine(dfs.SearchRoutine());
         } else if (s == SearchType.Dijkstra) {
-
+            Dijkstra d = ScriptableObject.CreateInstance<Dijkstra>();
+            d.Init(this, graph, start, goal);
+            StartCoroutine(d.SearchRoutine());
         } else if (s == SearchType.GreedyBest) {
             GreedyBest greedyBest = ScriptableObject.CreateInstance<GreedyBest>();
             greedyBest.Init(this, graph, start, goal);
             StartCoroutine(greedyBest.SearchRoutine());
-        } else if(s == SearchType.A) {
-            
+        } else if (s == SearchType.A) {
+            AStar a = ScriptableObject.CreateInstance<AStar>();
+            a.Init(this, graph, start, goal);
+            StartCoroutine(a.SearchRoutine());
         }
     }
 
