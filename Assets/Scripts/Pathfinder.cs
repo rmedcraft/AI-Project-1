@@ -50,13 +50,13 @@ public class Pathfinder : MonoBehaviour {
             }
         }
 
-        showColors(graphView, start, goal);
+        ShowColors(graphView, start, goal);
 
         isComplete = false;
         iterations = 0;
     }
 
-    public void showColors(GraphView graphView, Node start, Node goal) {
+    public void ShowColors(GraphView graphView, Node start, Node goal) {
         if (graphView == null || start == null || goal == null) {
             return;
         }
@@ -84,13 +84,13 @@ public class Pathfinder : MonoBehaviour {
         } else {
             Debug.LogWarning("GoalNodeView does not exist");
         }
-
-
     }
 
     public void ChooseSearch(SearchType s) {
         if (s == SearchType.BFS) {
             StartCoroutine(BFSSearchRoutine(timeStep));
+        } else if (s == SearchType.DFS) {
+            StartCoroutine(DFSSearchRoutine(timeStep));
         }
     }
 
@@ -106,7 +106,7 @@ public class Pathfinder : MonoBehaviour {
                 ExpandFrontier(currentNode);
                 if (frontierNodes.Contains(goal)) {
                     pathNodes = GetPathNodes(goal);
-                    showColors(graphView, start, goal);
+                    ShowColors(graphView, start, goal);
                     isComplete = true;
                 }
 
@@ -114,10 +114,39 @@ public class Pathfinder : MonoBehaviour {
             } else {
                 isComplete = true;
             }
-            showColors(graphView, start, goal);
+            ShowColors(graphView, start, goal);
         }
     }
 
+    public IEnumerator DFSSearchRoutine(float timeStep = 0.1f) {
+        yield return null;
+        while (!isComplete) {
+            if (frontierNodes.Count > 0) {
+                Node currentNode = frontierNodes.Dequeue();
+                if (!exploreNodes.Contains(currentNode)) {
+                    exploreNodes.Add(currentNode);
+                }
+                DFS(currentNode);
+                yield return new WaitForSeconds(timeStep);
+            } else {
+                isComplete = true;
+            }
+        }
+        ShowColors(graphView, start, goal);
+    }
+
+    public IEnumerator DFS(Node node) {
+        for (int i = 0; i < node.neighbors.Count; i++) {
+            if (!(node.neighbors[i].nodeType == NodeType.blocked) && !exploreNodes.Contains(node.neighbors[i])) {
+                node.neighbors[i].prev = node;
+                if (!exploreNodes.Contains(node)) {
+                    exploreNodes.Add(node);
+                }
+                yield return new WaitForSeconds(timeStep);
+                StartCoroutine(DFS(node.neighbors[i]));
+            }
+        }
+    }
     public void ExpandFrontier(Node node) {
         for (int i = 0; i < node.neighbors.Count; i++) {
             if (!exploreNodes.Contains(node.neighbors[i]) && !frontierNodes.Contains(node.neighbors[i])) {
