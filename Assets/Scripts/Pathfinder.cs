@@ -88,13 +88,49 @@ public class Pathfinder : MonoBehaviour {
 
     public void ChooseSearch(SearchType s) {
         if (s == SearchType.BFS) {
-            StartCoroutine(BFSSearchRoutine(timeStep));
+            StartCoroutine(BFSSearchRoutine());
         } else if (s == SearchType.DFS) {
-            StartCoroutine(DFSSearchRoutine(timeStep));
+            StartCoroutine(DFSSearchRoutine());
         }
     }
 
-    public IEnumerator BFSSearchRoutine(float timeStep = 0.1f) {
+    public IEnumerator DFSSearchRoutine() {
+        yield return null;
+        Stack<Node> s = new Stack<Node>();
+        s.Push(start);
+        while (!isComplete) {
+            if (s.Count > 0) {
+                Node currentNode = s.Pop();
+                iterations++;
+                if (!exploreNodes.Contains(currentNode)) {
+                    exploreNodes.Add(currentNode);
+                }
+
+                // add new bordering nodes to the stack
+                foreach (Node n in currentNode.neighbors) {
+                    if (n.nodeType != NodeType.blocked && !exploreNodes.Contains(n)) {
+                        s.Push(n);
+                        frontierNodes.Enqueue(n); // just so the color works, I'm not using frontier nodes in this alg, probably needs to be refactored
+                        n.prev = currentNode;
+                    }
+                }
+
+                // check if the current node was found
+                if (s.Contains(goal)) {
+                    pathNodes = GetPathNodes(goal);
+                    ShowColors(graphView, start, goal);
+                    isComplete = true;
+                }
+
+                yield return new WaitForSeconds(timeStep);
+            } else {
+                isComplete = true;
+            }
+            ShowColors(graphView, start, goal);
+        }
+    }
+
+    public IEnumerator BFSSearchRoutine() {
         yield return null;
         while (!isComplete) {
             if (frontierNodes.Count > 0) {
@@ -118,35 +154,9 @@ public class Pathfinder : MonoBehaviour {
         }
     }
 
-    public IEnumerator DFSSearchRoutine(float timeStep = 0.1f) {
-        yield return null;
-        while (!isComplete) {
-            if (frontierNodes.Count > 0) {
-                Node currentNode = frontierNodes.Dequeue();
-                if (!exploreNodes.Contains(currentNode)) {
-                    exploreNodes.Add(currentNode);
-                }
-                DFS(currentNode);
-                yield return new WaitForSeconds(timeStep);
-            } else {
-                isComplete = true;
-            }
-        }
-        ShowColors(graphView, start, goal);
-    }
 
-    public IEnumerator DFS(Node node) {
-        for (int i = 0; i < node.neighbors.Count; i++) {
-            if (!(node.neighbors[i].nodeType == NodeType.blocked) && !exploreNodes.Contains(node.neighbors[i])) {
-                node.neighbors[i].prev = node;
-                if (!exploreNodes.Contains(node)) {
-                    exploreNodes.Add(node);
-                }
-                yield return new WaitForSeconds(timeStep);
-                StartCoroutine(DFS(node.neighbors[i]));
-            }
-        }
-    }
+
+
     public void ExpandFrontier(Node node) {
         for (int i = 0; i < node.neighbors.Count; i++) {
             if (!exploreNodes.Contains(node.neighbors[i]) && !frontierNodes.Contains(node.neighbors[i])) {
