@@ -281,7 +281,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.89, y: 10, z: 2.25}
+  m_LocalPosition: {x: 2.89, y: 16.76, z: 2.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -486,9 +486,9 @@ RectTransform:
   - {fileID: 1934290632}
   m_Father: {fileID: 932311577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 460, y: -230}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -90, y: 80}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &523214013
@@ -619,8 +619,8 @@ MonoBehaviour:
   pathfinder: {fileID: 1713012690}
   startx: 0
   starty: 0
-  goalx: 11
-  goaly: 6
+  goalx: 15
+  goaly: 8
 --- !u!4 &580853934
 Transform:
   m_ObjectHideFlags: 0
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 5
   width: 5
-  text: {fileID: 4900000, guid: 6bd8db30a814c2941934ee75b5a3db9d, type: 3}
+  text: {fileID: 4900000, guid: 7b956077da45b8448bceffd7e0cd8c4d, type: 3}
 --- !u!114 &1599927486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2135,9 +2135,9 @@ RectTransform:
   - {fileID: 1659686487}
   m_Father: {fileID: 932311577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 460, y: -190}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -90, y: 30}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2001731591
@@ -2198,6 +2198,9 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: DFS
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: Dijkstra
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: Greedy Best First

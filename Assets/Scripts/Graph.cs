@@ -12,14 +12,14 @@ public class Graph : MonoBehaviour {
     int m_height = -1;
 
     public static readonly Vector2[] allDirections = {
-        // new Vector2(1f, 1f),
+        new Vector2(1f, 1f),
         new Vector2(1f, 0f),
-        // new Vector2(1f, -1f),
+        new Vector2(1f, -1f),
         new Vector2(0f, 1f),
         new Vector2(0f, -1f),
-        // new Vector2(-1f, 1f),
+        new Vector2(-1f, 1f),
         new Vector2(-1f, 0f),
-        // new Vector2(-1f, -1f),
+        new Vector2(-1f, -1f),
     };
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
