@@ -93,10 +93,6 @@ public class Pathfinder : MonoBehaviour {
             DFS dfs = ScriptableObject.CreateInstance<DFS>();
             dfs.Init(this, graph, start, goal);
             StartCoroutine(dfs.SearchRoutine());
-        } else if (s == SearchType.Dijkstra) {
-            Dijkstra d = ScriptableObject.CreateInstance<Dijkstra>();
-            d.Init(this, graph, start, goal);
-            StartCoroutine(d.SearchRoutine());
         } else if (s == SearchType.GreedyBest) {
             GreedyBest greedyBest = ScriptableObject.CreateInstance<GreedyBest>();
             greedyBest.Init(this, graph, start, goal);

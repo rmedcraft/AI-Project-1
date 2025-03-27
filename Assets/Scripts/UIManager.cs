@@ -50,9 +50,8 @@ public enum SearchType {
     None = 0,
     BFS = 1,
     DFS = 2,
-    Dijkstra = 3,
-    GreedyBest = 4,
-    AManhattan = 5,
-    AEuclidean = 6,
+    GreedyBest = 3,
+    AManhattan = 4,
+    AEuclidean = 5,
 
 }

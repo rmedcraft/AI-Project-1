@@ -55,12 +55,7 @@ public class DFS : ScriptableObject {
                 }
 
                 // add new bordering nodes to the stack
-                foreach (Node n in currentNode.neighbors) {
-                    if (n.nodeType != NodeType.blocked && !exploreNodes.Contains(n)) {
-                        frontierNodes.Push(n);
-                        n.prev = currentNode;
-                    }
-                }
+                ExpandFrontier(currentNode);
 
                 // check if the current node was found
                 if (frontierNodes.Contains(goal)) {
