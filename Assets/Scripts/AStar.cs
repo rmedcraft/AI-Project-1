@@ -15,6 +15,7 @@ public class AStar : ScriptableObject {
     public int iterations;
     Dictionary<Node, int> distFromStart;
     bool manhattan;
+    int maxFrontier = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Init(Pathfinder pathfinder, Graph graph, Node start, Node goal, bool manhattan) {
@@ -77,6 +78,16 @@ public class AStar : ScriptableObject {
                 isComplete = true;
             }
             pathfinder.ShowColors(frontierNodes.ToList(), exploreNodes, pathNodes);
+
+            if (frontierNodes.Count > maxFrontier) {
+                maxFrontier = frontierNodes.Count;
+            }
+
+            int totalExplored = exploreNodes.Count + frontierNodes.Count;
+
+            Debug.Log("Iterations: " + iterations);
+            Debug.Log("Explored Nodes: " + totalExplored);
+            Debug.Log("Max Frontier: " + maxFrontier);
         }
     }
 

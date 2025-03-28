@@ -13,6 +13,7 @@ public class BFS : ScriptableObject {
     List<Node> pathNodes;
     public bool isComplete;
     public int iterations;
+    int maxFrontier = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Init(Pathfinder pathfinder, Graph graph, Node start, Node goal) {
@@ -69,6 +70,16 @@ public class BFS : ScriptableObject {
                 isComplete = true;
             }
             pathfinder.ShowColors(frontierNodes.ToList(), exploreNodes, pathNodes);
+
+            if (frontierNodes.Count > maxFrontier) {
+                maxFrontier = frontierNodes.Count;
+            }
+
+            int totalExplored = exploreNodes.Count + frontierNodes.Count;
+
+            Debug.Log("Iterations: " + iterations);
+            Debug.Log("Explored Nodes: " + totalExplored);
+            Debug.Log("Max Frontier: " + maxFrontier);
         }
     }
 
